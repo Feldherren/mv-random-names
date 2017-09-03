@@ -18,12 +18,22 @@
  * @desc Third list of names that can easily be used for multiple units; uses separator defined above.
  * @default Achaios,Acis,Adonis,Aegipan,Aigis,Aigyptos,Aiolides,Aion,Aisa,Aisakos,Aithilla,Aithon,Aitne,Akakos,Alkmene,Ampelos,Anaxibia,Anius,Antigone,Apemosyne,Archedios,Argo,Arkeisios,Askalabos,Atropos,Atys,Augeias,Auson,Bacchus,Bakis,Belos,Berekyntia,Bormos,Bromios,Brontes,Bukolos,Camers,Carna,Catillus,Charis,Chesias,Chryses,Cybele,Damia,Danae,Dardanos,Deianeira,Deidameia,Deimachos,Deimos,Dekelos,Delphos,Derkynos,Dodona,Dryope,Dwyvaer,Dysaules,Echetlos,Echo,Eidothea,Elatus,Elpenor,Enipeus,Epigonoi,Epione,Erato,Erebos,Euadne,Euchenor,Euenos,Eunomos,Eupalamos,Euphorbos,Europe,Fames,Fauna,Galateia,Galeos,Glauke,Grups,Gyes,Gygas,Halia,Halisera,Helias,Helios,Hemithea,Hepaklos,Herkyna,Hippotes,Hopladamos,Huaina,Hylas,Iamos,Ianthe,Ilos,Inferi,Inuus,Iobes,Iphis,Irae,Irus,Ischys,Isyrion,Janus,Jupiter,Justitia,Kampe,Kapys,Kaukon,Kaunos,Kelmis,Kephalos,Kilix,Klaros,Kleobis,Kranaos,Kyknos,Kyzikos,Laios,Lampetos,Laodameia,Laodike,Lapithes,Latinos,Latona,Lausus,Laverna,Leimone,Leipephile,Leuke,Leukippe,Leukon,Linos,Lityerses,Llawran,Lykeios,Lykomedes,Lykophron,Lykurgos,Lynkos,Lysippe,Machaon,Maiandros,Makaria,Mars,Mavors,Megareus,Melaineus,Melampus,Memphis,Menestheus,Merops,Mestor,Metaneira,Metis,Metope,Minos,Minyas,Misericordia,Mnestra,Molossos,Morpheus,Mulciber,Musa,Mykenai,Myrine,Myrto,Nausithos,Nautes,Neaira,Neilos,Nemea,Nessos,Nireus,Nomios,Nyx,Ogaphos,Ogygos,Oiax,Oibalos,Oinomaos,Ophis,Orthaia,Oxylos,Pallene,Pasiphae,Pedasos,Peirene,Pelias,Penates,Penia,Penthesileia,Peripanos,Persephone,Perseus,Phobos,Phrasios,Phrixos,Phthonos,Pieria,Pisos,Pitane,Pittheus,Poine,Polybos,Polydamna,Polykaon,Polyxo,Prokne,Prokris,Proteus,Prothoos,Remnus,Rhadamanthys,Rhadine,Rhakios,Rhea,Salamis,Salios,Satyros,Semele,Sibyl,Sikyon,Silvanus,Sinope,Sisyphos,Sithon,Sol,Sybaris,Syme,Talaos,Tantalos,Tatius,Telephassa,Tenes,Teukros,Thaeox,Thamyris,Thelxion,Theophane,Thespis,Thoas,Thyia,Tyche,Typhon,Uranos,Vesta,Zephyrus
  * 
- * @help Random Names v1.0, by Feldherren (rpaliwoda AT googlemail.com)
-
- This plugin does not provide plugin commands.
+ * @help Random Names v1.1, by Feldherren (rpaliwoda AT googlemail.com)
+ 
+ A simple script for picking random names from lists, and either 
+ automatically applying those to Actors and Enemies when generated, 
+ or dropping them into a designated variable using a script command.
+ 
+ Changelog:
+ v1.1: changed script name, added script command for dropping name into variable
 
  Free for use with commercial projects, though I'd appreciate being
  contacted if you do use it in any games, just to know.
+ 
+ Script commands:
+ RANDOMNAME [list] [variable #]
+ Gets a random name from the named list '[list]', and sets variable '[variable #]'
+ to it.
 
  Notebox tags:
  <name_list:list>
@@ -37,7 +47,7 @@
  plugin parameters.
  */ 
 (function() {
- var parameters = PluginManager.parameters('RandomNames');
+ var parameters = PluginManager.parameters('FELD_RandomNames');
 
  var _Game_Actor_setup = Game_Actor.prototype.setup;
  Game_Actor.prototype.setup = function(actorId) {
@@ -93,4 +103,21 @@
 Game_Enemy.prototype.originalName = function() {
 	return this.random_name;
 };
+
+var FELD_RandomNames_aliasPluginCommand = Game_Interpreter.prototype.pluginCommand;
+
+Game_Interpreter.prototype.pluginCommand = function(command, args)
+{
+	FELD_RandomNames_aliasPluginCommand.call(this,command,args);
+	// args[0] is listname, args[1] is variable number
+	if (command == "RANDOMNAME" && args[0] != null && args[1] != null)
+	{
+		name_set = parameters[args[0]].split(parameters['Separator']);
+		var choice = Math.random();
+		choice *= name_set.length;
+		choice = Math.floor(choice);
+		$gameVariables.setValue(args[1], name_set[choice]);
+	}
+}
+
 })();
