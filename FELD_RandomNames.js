@@ -93,5 +93,4 @@
 Game_Enemy.prototype.originalName = function() {
 	return this.random_name;
 };
-
 })();
