@@ -22,15 +22,15 @@
  
  A simple script for picking random names from lists, and either 
  automatically applying those to Actors and Enemies when generated, 
- or dropping them into a designated variable using a script command.
+ or dropping them into a designated variable using a plugin command.
  
  Changelog:
- v1.1: changed script name, added script command for dropping name into variable
+ v1.1: changed script name, added plugin command for dropping name into variable
 
  Free for use with commercial projects, though I'd appreciate being
  contacted if you do use it in any games, just to know.
  
- Script commands:
+ Plugub commands:
  RANDOMNAME [list] [variable #]
  Gets a random name from the named list '[list]', and sets variable '[variable #]'
  to it.
