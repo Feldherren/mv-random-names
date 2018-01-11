@@ -30,7 +30,7 @@
  Free for use with commercial projects, though I'd appreciate being
  contacted if you do use it in any games, just to know.
  
- Plugub commands:
+ Plugin commands:
  RANDOMNAME [list] [variable #]
  Gets a random name from the named list '[list]', and sets variable '[variable #]'
  to it.
